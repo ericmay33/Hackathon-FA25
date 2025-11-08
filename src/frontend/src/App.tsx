@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import MainGenerator from './MainGenerator';
+import MainGenerator from './pages/MainGenerator';
 import History from './pages/History';
 import { Project } from './types/project';
 
