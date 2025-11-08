@@ -86,30 +86,77 @@ export default function MainGenerator({ onProjectComplete, currentProject }: Mai
 
     try {
       // CALL BOTH ENDPOINTS IN PARALLEL
-      const [appResponse, analysisResponse] = await Promise.all([
-        // SHAWN'S ENDPOINT
-        fetch(`${API_URL}/api/generate-app`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prompt: businessIdea })
-        }),
-        // ERIC'S ENDPOINT
-        fetch(`${API_URL}/api/analyze-business`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            businessIdea,
-            targetAudience: targetAudience || undefined,
-            budget: budget || undefined
+      let appResponse, analysisResponse;
+      
+      try {
+        [appResponse, analysisResponse] = await Promise.all([
+          // SHAWN'S ENDPOINT
+          fetch(`${API_URL}/api/generate-app`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt: businessIdea })
+          }),
+          // ERIC'S ENDPOINT
+          fetch(`${API_URL}/api/analyze-business`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              businessIdea,
+              targetAudience: targetAudience || undefined,
+              budget: budget || undefined
+            })
           })
-        })
-      ]);
+        ]);
+      } catch (fetchError) {
+        throw new Error(
+          `Failed to connect to backend server at ${API_URL}. ` +
+          `Please make sure the backend is running on port 3001. ` +
+          `Error: ${fetchError instanceof Error ? fetchError.message : String(fetchError)}`
+        );
+      }
 
-      const appData = await appResponse.json();
-      const analysisData = await analysisResponse.json();
+      // Parse responses and handle errors
+      let appData;
+      let analysisData;
+      
+      try {
+        const contentType = appResponse.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          const text = await appResponse.text();
+          throw new Error(`Server returned HTML instead of JSON. Is the backend running at ${API_URL}? Response: ${text.substring(0, 200)}`);
+        }
+        
+        if (!appResponse.ok) {
+          const errorText = await appResponse.text();
+          throw new Error(`App generation failed (${appResponse.status}): ${errorText.substring(0, 200)}`);
+        }
+        
+        appData = await appResponse.json();
+      } catch (e) {
+        if (e instanceof Error && (e.message.includes('App generation failed') || e.message.includes('Server returned HTML'))) {
+          throw e;
+        }
+        throw new Error(`Failed to parse app response. Is the backend running at ${API_URL}? Error: ${e instanceof Error ? e.message : String(e)}`);
+      }
 
-      if (!appResponse.ok || !analysisResponse.ok) {
-        throw new Error('Generation failed');
+      try {
+        const contentType = analysisResponse.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          const text = await analysisResponse.text();
+          throw new Error(`Server returned HTML instead of JSON. Is the backend running at ${API_URL}? Response: ${text.substring(0, 200)}`);
+        }
+        
+        if (!analysisResponse.ok) {
+          const errorText = await analysisResponse.text();
+          throw new Error(`Business analysis failed (${analysisResponse.status}): ${errorText.substring(0, 200)}`);
+        }
+        
+        analysisData = await analysisResponse.json();
+      } catch (e) {
+        if (e instanceof Error && (e.message.includes('Business analysis failed') || e.message.includes('Server returned HTML'))) {
+          throw e;
+        }
+        throw new Error(`Failed to parse analysis response. Is the backend running at ${API_URL}? Error: ${e instanceof Error ? e.message : String(e)}`);
       }
 
       clearInterval(interval);

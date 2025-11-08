@@ -1,6 +1,10 @@
 // backend/routes/analyze-business.ts
 import express, { Request, Response } from 'express';
 import OpenAI from 'openai';
+import dotenv from 'dotenv';
+
+// Ensure environment variables are loaded
+dotenv.config();
 
 const router = express.Router();
 const openai = new OpenAI({

@@ -1,11 +1,13 @@
+import dotenv from 'dotenv';
+// Load environment variables FIRST before any other imports that might need them
+dotenv.config();
+
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import OpenAI from 'openai';
-import dotenv from 'dotenv';
 import fs from 'fs/promises';
 import path from 'path';
-
-dotenv.config();
+import analyzeBusinessRouter from './routes/analyze-business';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -177,8 +179,11 @@ app.get('/health', (req: Request, res: Response) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Generate app
-app.post('/api/generate', async (req: Request, res: Response) => {
+// Mount business analysis route
+app.use('/api', analyzeBusinessRouter);
+
+// Generate app handler
+async function handleGenerateApp(req: Request, res: Response) {
   try {
     const { prompt } = req.body;
 
@@ -224,7 +229,11 @@ app.post('/api/generate', async (req: Request, res: Response) => {
       message: error.message,
     });
   }
-});
+}
+
+// Generate app endpoints (both for compatibility)
+app.post('/api/generate', handleGenerateApp);
+app.post('/api/generate-app', handleGenerateApp);
 
 // Get all apps
 app.get('/api/apps', async (req: Request, res: Response) => {
