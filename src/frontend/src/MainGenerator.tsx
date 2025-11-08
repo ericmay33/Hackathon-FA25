@@ -85,19 +85,29 @@ export default function MainGenerator({ onProjectComplete, currentProject }: Mai
     }, 1500);
 
     try {
-      // CALL BOTH ENDPOINTS IN PARALLEL
+      // CALL BOTH ENDPOINTS IN PARALLEL with timeout
       let appResponse, analysisResponse;
       
+      const fetchWithTimeout = (url: string, options: RequestInit, timeout = 120000) => {
+        return Promise.race([
+          fetch(url, options),
+          new Promise<Response>((_, reject) =>
+            setTimeout(() => reject(new Error(`Request timeout after ${timeout}ms`)), timeout)
+          )
+        ]);
+      };
+      
       try {
+        console.log('Making API requests to:', `${API_URL}/api/generate-app`, `${API_URL}/api/analyze-business`);
         [appResponse, analysisResponse] = await Promise.all([
           // SHAWN'S ENDPOINT
-          fetch(`${API_URL}/api/generate-app`, {
+          fetchWithTimeout(`${API_URL}/api/generate-app`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ prompt: businessIdea })
-          }),
+          }, 120000), // 2 minute timeout
           // ERIC'S ENDPOINT
-          fetch(`${API_URL}/api/analyze-business`, {
+          fetchWithTimeout(`${API_URL}/api/analyze-business`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -105,9 +115,11 @@ export default function MainGenerator({ onProjectComplete, currentProject }: Mai
               targetAudience: targetAudience || undefined,
               budget: budget || undefined
             })
-          })
+          }, 120000) // 2 minute timeout
         ]);
+        console.log('API requests completed, status:', appResponse.status, analysisResponse.status);
       } catch (fetchError) {
+        console.error('Fetch error:', fetchError);
         throw new Error(
           `Failed to connect to backend server at ${API_URL}. ` +
           `Please make sure the backend is running on port 3001. ` +
