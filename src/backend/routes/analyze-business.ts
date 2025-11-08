@@ -27,34 +27,34 @@ Output ONLY valid JSON in this exact format:
     "marketSize": "Estimated TAM/SAM/SOM",
     "competitors": ["competitor 1", "competitor 2", "competitor 3"],
     "trends": [
-      {"name": "Trend 1", "impact": 8},
-      {"name": "Trend 2", "impact": 6},
-      {"name": "Trend 3", "impact": 7}
+      {"name": "Trend 1", "impact": "impact level"},
+      {"name": "Trend 2", "impact": "impact level"},
+      {"name": "Trend 3", "impact": "impact level"}
     ]
   },
   "financials": {
     "pricingStrategy": "Description of pricing approach",
     "revenueStreams": ["stream 1", "stream 2"],
     "initialCosts": {
-      "development": 10000,
-      "marketing": 5000,
-      "operations": 3000
+      "development": "value",
+      "marketing": "value",
+      "operations": "value"
     },
     "projectedRevenue": {
-      "year1": 50000,
-      "year2": 150000,
-      "year3": 400000
+      "year1": "value",
+      "year2": "value",
+      "year3": "value"
     }
   },
   "risks": [
-    {"name": "Risk 1", "severity": 8, "mitigation": "How to address"},
-    {"name": "Risk 2", "severity": 6, "mitigation": "How to address"},
-    {"name": "Risk 3", "severity": 7, "mitigation": "How to address"}
+    {"name": "Risk 1", "severity": "severity level", "mitigation": "How to address"},
+    {"name": "Risk 2", "severity": "severity level", "mitigation": "How to address"},
+    {"name": "Risk 3", "severity": "severity level", "mitigation": "How to address"}
   ],
   "keyMetrics": [
-    {"name": "CAC", "value": "150", "unit": "USD"},
-    {"name": "LTV", "value": "1200", "unit": "USD"},
-    {"name": "Conversion Rate", "value": "3.5", "unit": "%"}
+    {"name": "industry relevant metric 1", "value": "value", "unit": "unit"},
+    {"name": "industry relevant metric 2", "value": "value", "unit": "unit"},
+    {"name": "industry relevant metric 3", "value": "value", "unit": "unit"}
   ],
   "elevator pitch": "One compelling sentence about the business"
 }`;

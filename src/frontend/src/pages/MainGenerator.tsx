@@ -83,7 +83,8 @@ export default function MainGenerator({ onProjectComplete, currentProject }: Mai
                     throw new Error(`App generation failed (${appResponse.status}): ${errorText.substring(0, 200)}`);
                 }
                 
-                appData = await appResponse.json();
+                const appResponseData = await appResponse.json();
+                appData = appResponseData.app || appResponseData;
             } catch (e) {
                 if (e instanceof Error && (e.message.includes('App generation failed') || e.message.includes('Server returned HTML'))) {
                     throw e;
