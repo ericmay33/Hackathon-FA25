@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import MainGenerator from './pages/MainGenerator';
+import MainGenerator from './MainGenerator';
 import History from './pages/History';
 import { Project } from './types/project';
 
@@ -8,9 +8,13 @@ export default function App() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
 
-  const addProject = (project: Project) => {
-    setProjects([project, ...projects]);
-    setCurrentProject(project);
+  const addProject = (project: Project | null) => {
+    if (project) {
+      setProjects([project, ...projects]);
+      setCurrentProject(project);
+    } else {
+      setCurrentProject(null);
+    }
   };
 
   return (

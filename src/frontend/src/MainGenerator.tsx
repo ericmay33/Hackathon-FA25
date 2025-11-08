@@ -1,10 +1,18 @@
 import { useState } from 'react';
+import { Project, Template } from './types/project';
+import { API_URL } from './constants';
+import ResultsView from './components/ResultsView';
 
-export default function MainGenerator({ onProjectComplete, currentProject }) {
+interface MainGeneratorProps {
+  onProjectComplete: (project: Project | null) => void;
+  currentProject: Project | null;
+}
+
+export default function MainGenerator({ onProjectComplete, currentProject }: MainGeneratorProps) {
   const [businessIdea, setBusinessIdea] = useState('');
   const [targetAudience, setTargetAudience] = useState('');
   const [budget, setBudget] = useState('');
-  const [useTemplate, setUseTemplate] = useState(null);
+  const [useTemplate, setUseTemplate] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [stage, setStage] = useState(0);
   const [error, setError] = useState('');
@@ -122,14 +130,14 @@ export default function MainGenerator({ onProjectComplete, currentProject }) {
 
     } catch (err) {
       clearInterval(interval);
-      setError(err.message || 'Failed to generate startup package');
+      setError(err instanceof Error ? err.message : 'Failed to generate startup package');
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  const applyTemplate = (template) => {
+  const applyTemplate = (template: Template) => {
     setBusinessIdea(template.prompt);
     setUseTemplate(template.name);
     setShowTemplates(false);
