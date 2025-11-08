@@ -1,12 +1,10 @@
-**/.env
-**/.env.*.local
+.env.local
+.env
 
 node_modules
 dist
 dist-ssr
-*.local
 
-**/node_modules
 
 .vscode/*
 !.vscode/extensions.json
