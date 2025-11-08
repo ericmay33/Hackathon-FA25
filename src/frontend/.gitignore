@@ -1,0 +1,16 @@
+**/.env
+**/.env.*.local
+
+node_modules
+dist
+dist-ssr
+*.local
+
+**/node_modules
+
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
