@@ -25,9 +25,9 @@ export default function App() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                🚀 AI Startup Studio
+                🚀 Startup Starter
               </h1>
-              <p className="text-sm text-gray-600 mt-1">Your AI Co-Founder in 60 Seconds</p>
+              <p className="text-sm text-gray-600 mt-1">AI CO-FOUNDER... or like assistant</p>
             </div>
             {/* Navigation */}
             <nav className="flex gap-2">

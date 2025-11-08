@@ -7,7 +7,7 @@ export const stages: string[] = [
     '🎨 Generating prototype...',
     '📊 Analyzing market data...',
     '💰 Calculating financials...',
-    '✅ Complete!'
+    '⏳ Loading your results...'
 ];
 
 export const templates: Template[] = [

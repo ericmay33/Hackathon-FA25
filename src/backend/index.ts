@@ -64,29 +64,54 @@ const BLOCKED_PATTERNS = [
 ];
 
 // System prompt for code generation
-const SYSTEM_PROMPT = `You are an expert HTML/CSS/JavaScript code generator. Your goal is to create beautiful, functional, self-contained web applications.
+const SYSTEM_PROMPT = `You are an expert frontend developer and UI/UX designer tasked with creating **complex, visually impressive, modern websites** using only HTML, CSS (inlined or via <style>), and optional inline JavaScript.  
 
-RULES:
-1. Output ONLY a single HTML file with inline CSS and JavaScript
-2. Must be completely self-contained (no external files)
-3. Use CDN imports for any libraries (React via CDN is allowed)
-4. Keep total code under 200 lines
-5. NO server-side code, NO npm packages, NO build steps
-6. NO dangerous functions: eval, exec, system calls, file system access
-7. Include beautiful, modern styling with gradients and animations
-8. Make it mobile-responsive
-9. Add helpful comments in the code
+Your output must look like a **real, professional, production-quality website or app** that can be displayed directly in a browser without any build tools or servers.
 
-STYLING GUIDELINES:
-- Use modern CSS (flexbox, grid, animations)
-- Add smooth transitions and hover effects
-- Use a cohesive color scheme
-- Make it visually appealing with gradients or interesting backgrounds
-- Ensure good contrast for readability
+### OBJECTIVE
+Generate a **fully self-contained, single HTML file** that brings the user's idea to life as a beautiful, functional, and responsive web app or landing page.
+
+### RULES
+1. Return ONLY valid HTML (starting with <!DOCTYPE html>).
+2. Use clean, semantic HTML5 structure (header, nav, main, section, footer, etc.).
+3. Include CSS inside <style> tags. You may also use inline <script> for light interactivity.
+4. You may import **external CDNs** for fonts, icons, and frameworks:
+   - Google Fonts
+   - Font Awesome icons
+   - Tailwind CSS via CDN
+   - Chart.js (for visualizations)
+   - AOS or animate.css for animations
+5. Aim for visually **stunning**, **responsive**, and **modern** UI/UX.
+6. Use **layout systems** like Flexbox and Grid.
+7. Add **animations**, **hover effects**, and **transitions**.
+8. Use **consistent color palettes** and **beautiful typography**.
+9. Add sections, cards, gradients, buttons, and hero headers.
+10. Never use eval, exec, filesystem, or server code.
+11. Keep it under ~400 lines (focus on design quality, not brevity).
+12. It should render well standalone in the browser frontend.
+
+### STYLING & DESIGN
+- Include a hero section with gradient backgrounds or large imagery.
+- Use soft shadows, rounded corners, and layered visual hierarchy.
+- Use smooth transitions and hover effects for buttons and cards.
+- Include placeholder images (e.g. via https://picsum.photos/ or unsplash.com).
+- Make the layout responsive (mobile and desktop).
+- Add at least a few content components: hero, features, pricing, testimonials, contact, etc.
+- Use engaging visual balance — spacing, alignment, and color contrast.
+
+Example features you may include when relevant:
+- Dashboard layouts
+- Interactive forms
+- Charts or stats
+- Image galleries
+- Landing pages with calls-to-action
+- Portfolios
+- Product showcases
 
 OUTPUT FORMAT:
-Return ONLY the HTML code. No markdown code blocks, no explanations, no preamble.
-Start directly with <!DOCTYPE html>`;
+Return ONLY the complete HTML code with inline CSS. No markdown code blocks, no explanations, no preamble.
+Start directly with <!DOCTYPE html>
+Include everything needed for a stunning, production-ready landing page.`;
 
 // Utility functions
 async function ensureDataDir() {
@@ -159,7 +184,7 @@ function sanitizeCode(code: string): string {
 async function generateCode(prompt: string): Promise<string> {
   try {
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model: 'gpt-4o', // Using the more powerful model for better quality output
       messages: [
         {
           role: 'system',
@@ -167,11 +192,11 @@ async function generateCode(prompt: string): Promise<string> {
         },
         {
           role: 'user',
-          content: `Create a web application that does the following:\n\n${prompt}\n\nMake it functional, beautiful, and user-friendly.`,
+          content: `Create an absolutely stunning, premium landing page for this business:\n\n${prompt}\n\nCreate a world-class landing page with:\n- Hero section with background image\n- Features section with flexbox layout\n- Benefits section\n- Social proof/testimonials\n- Strong call-to-action\n\nUse inline CSS with flexbox for all layouts. Use high-quality Unsplash background images. Make it look like a premium, multi-million dollar startup's website. NO JavaScript - pure HTML and inline CSS only.\n\nIMPORTANT: Create a COMPLETE, DETAILED landing page with extensive CSS styling. Include multiple sections, beautiful typography, gradients, shadows, and modern design elements. Make it look absolutely stunning and professional.`,
         },
       ],
-      temperature: 0.7,
-      max_tokens: 2000,
+      temperature: 0.9, // Higher creativity
+      max_tokens: 16000, // Doubled token limit for more detailed output
     });
 
     const code = completion.choices[0].message.content;
@@ -206,9 +231,7 @@ async function handleGenerateApp(req: Request, res: Response) {
       return res.status(400).json({ error: 'Invalid prompt provided' });
     }
 
-    if (prompt.length > 500) {
-      return res.status(400).json({ error: 'Prompt is too long (max 500 characters)' });
-    }
+    // No prompt length limit - allow detailed business descriptions
 
     const appId = `app_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 

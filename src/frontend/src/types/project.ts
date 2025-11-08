@@ -11,15 +11,55 @@ export interface SWOT {
   threats: string[];
 }
 
+export interface MarketTrend {
+  name: string;
+  impact: number; // 1-10 scale
+  description?: string;
+}
+
 export interface MarketAnalysis {
   targetMarket: string;
   marketSize: string;
   competitors: string[];
+  trends?: MarketTrend[];
+  marketGrowth?: number; // percentage
 }
 
 export interface Financials {
   pricingStrategy?: string;
   revenueStreams?: string[];
+  initialCosts?: {
+    development?: number;
+    marketing?: number;
+    operations?: number;
+    infrastructure?: number;
+    legal?: number;
+    other?: number;
+  };
+  projectedRevenue?: {
+    year1?: number;
+    year2?: number;
+    year3?: number;
+    year4?: number;
+    year5?: number;
+  };
+  monthlyBurnRate?: number;
+  breakEvenMonth?: number;
+  totalFundingNeeded?: number;
+}
+
+export interface TimelineMilestone {
+  phase: string;
+  duration: string; // e.g., "3 months"
+  tasks: string[];
+  cost: number;
+  dependencies?: string[];
+}
+
+export interface MVPTimeline {
+  milestones: TimelineMilestone[];
+  totalDuration: string;
+  launchDate?: string;
 }
 
 export interface Risk {
@@ -35,6 +75,7 @@ export interface BusinessAnalysis {
   marketAnalysis?: MarketAnalysis;
   financials?: Financials;
   risks?: Risk[];
+  mvpTimeline?: MVPTimeline;
 }
 
 export interface AppPrototypeData {

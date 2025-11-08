@@ -24,40 +24,91 @@ Output ONLY valid JSON in this exact format:
   },
   "marketAnalysis": {
     "targetMarket": "Description of target customers",
-    "marketSize": "Estimated TAM/SAM/SOM",
+    "marketSize": "Estimated TAM/SAM/SOM (e.g., $50M)",
     "competitors": ["competitor 1", "competitor 2", "competitor 3"],
+    "marketGrowth": "percentage growth rate",
     "trends": [
-      {"name": "Trend 1", "impact": "impact level"},
-      {"name": "Trend 2", "impact": "impact level"},
-      {"name": "Trend 3", "impact": "impact level"}
+      {"name": "Trend 1", "impact": 8, "description": "Brief description"},
+      {"name": "Trend 2", "impact": 6, "description": "Brief description"},
+      {"name": "Trend 3", "impact": 7, "description": "Brief description"}
     ]
   },
   "financials": {
     "pricingStrategy": "Description of pricing approach",
     "revenueStreams": ["stream 1", "stream 2"],
     "initialCosts": {
-      "development": "value",
-      "marketing": "value",
-      "operations": "value"
+      "development": "development cost",
+      "marketing": "marketing cost",
+      "operations": "operations cost",
+      "infrastructure": "infrastructure cost",
+      "legal": "legal cost",
+      "other": "other cost"
     },
     "projectedRevenue": {
-      "year1": "value",
-      "year2": "value",
-      "year3": "value"
-    }
+      "year1": "projected revenue for year 1",
+      "year2": "projected revenue for year 2",
+      "year3": "projected revenue for year 3",
+      "year4": "projected revenue for year 4",
+      "year5": "projected revenue for year 5"
+    },
+    "monthlyBurnRate": "monthly burn rate",
+    "breakEvenMonth": "break even month",
+    "totalFundingNeeded": "total funding needed"
+  },
+  "mvpTimeline": {
+    "milestones": [
+      {
+        "phase": "Discovery & Planning",
+        "duration": "duration of discovery & planning",
+        "tasks": ["Market research", "User interviews", "Technical architecture", "Design mockups"],
+        "cost": "cost of discovery & planning",
+        "dependencies": []
+      },
+      {
+        "phase": "Core Development",
+        "duration": "duration of core development",
+        "tasks": ["Backend development", "Frontend development", "API integration", "Database setup"],
+        "cost": "cost of core development",
+        "dependencies": ["Discovery & Planning"]
+      },
+      {
+        "phase": "Testing & Refinement",
+        "duration": "duration of testing & refinement",
+        "tasks": ["QA testing", "Bug fixes", "Performance optimization", "Security audit"],
+        "cost": "cost of testing & refinement",
+        "dependencies": ["Core Development"]
+      },
+      {
+        "phase": "Launch Preparation",
+        "duration": "duration of launch preparation",
+        "tasks": ["Marketing setup", "Beta testing", "Documentation", "Launch planning"],
+        "cost": "cost of launch preparation",
+        "dependencies": ["Testing & Refinement"]
+      }
+    ],
+    "totalDuration": "total duration of the project",
+    "launchDate": "6 months from start"
   },
   "risks": [
-    {"name": "Risk 1", "severity": "severity level", "mitigation": "How to address"},
-    {"name": "Risk 2", "severity": "severity level", "mitigation": "How to address"},
-    {"name": "Risk 3", "severity": "severity level", "mitigation": "How to address"}
+    {"name": "Risk 1", "severity": 8, "mitigation": "How to address"},
+    {"name": "Risk 2", "severity": 6, "mitigation": "How to address"},
+    {"name": "Risk 3", "severity": 7, "mitigation": "How to address"}
   ],
   "keyMetrics": [
-    {"name": "industry relevant metric 1", "value": "value", "unit": "unit"},
-    {"name": "industry relevant metric 2", "value": "value", "unit": "unit"},
-    {"name": "industry relevant metric 3", "value": "value", "unit": "unit"}
+    {"name": "CAC", "value": "150", "unit": "USD"},
+    {"name": "LTV", "value": "1200", "unit": "USD"},
+    {"name": "Conversion Rate", "value": "3.5", "unit": "%"}
   ],
-  "elevator pitch": "One compelling sentence about the business"
-}`;
+  "elevatorPitch": "One compelling sentence about the business"
+}
+
+IMPORTANT: 
+- All numeric values in financials must be actual numbers (not strings)
+- Impact scores in trends must be numbers 1-10
+- Market growth must be a number (percentage)
+- All cost values must be realistic numbers in USD
+- Revenue projections should be realistic and show growth trajectory
+- Timeline milestones should be realistic and sequential`;
 
 interface BusinessAnalysisRequest {
   businessIdea: string;

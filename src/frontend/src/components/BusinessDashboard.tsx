@@ -1,5 +1,6 @@
 import SWOTSection from './SWOTSection';
 import InfoBlock from './InfoBlock';
+import MarketTrends from './MarketTrends';
 import { BusinessAnalysis } from '../types/project';
 
 interface BusinessDashboardProps {
@@ -51,25 +52,31 @@ export default function BusinessDashboard({ analysis }: BusinessDashboardProps) 
             )}
             {/* Market Analysis */}
             {analysis.marketAnalysis && (
-                <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-purple-100">
-                    <h3 className="text-2xl font-bold text-gray-800 mb-6">🎯 Market Analysis</h3>
-                    <div className="space-y-4">
-                        <InfoBlock label="Target Market" value={analysis.marketAnalysis.targetMarket} />
-                        <InfoBlock label="Market Size" value={analysis.marketAnalysis.marketSize} />
-                        {analysis.marketAnalysis.competitors && (
-                            <div>
-                                <h4 className="font-semibold text-gray-700 mb-2">Key Competitors</h4>
-                                <div className="flex flex-wrap gap-2">
-                                    {analysis.marketAnalysis.competitors.map((comp, idx) => (
-                                        <span key={idx} className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">
-                                            {comp}
-                                        </span>
-                                    ))}
+                <>
+                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-purple-100">
+                        <h3 className="text-2xl font-bold text-gray-800 mb-6">🎯 Market Analysis</h3>
+                        <div className="space-y-4">
+                            <InfoBlock label="Target Market" value={analysis.marketAnalysis.targetMarket} />
+                            <InfoBlock label="Market Size" value={analysis.marketAnalysis.marketSize} />
+                            {analysis.marketAnalysis.competitors && (
+                                <div>
+                                    <h4 className="font-semibold text-gray-700 mb-2">Key Competitors</h4>
+                                    <div className="flex flex-wrap gap-2">
+                                        {analysis.marketAnalysis.competitors.map((comp, idx) => (
+                                            <span key={idx} className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">
+                                                {comp}
+                                            </span>
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
+                        </div>
                     </div>
-                </div>
+                    {/* Market Trends Visualization */}
+                    {analysis.marketAnalysis.trends && analysis.marketAnalysis.trends.length > 0 && (
+                        <MarketTrends marketAnalysis={analysis.marketAnalysis} />
+                    )}
+                </>
             )}
             {/* Financials */}
             {analysis.financials && (
